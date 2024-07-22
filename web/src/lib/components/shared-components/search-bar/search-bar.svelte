@@ -28,7 +28,6 @@
   let showFilter = false;
   let isSearchSuggestions = false;
   let selectedId: string | undefined;
-  let lastSearchTerm: string = '';
   let moveSelection: (direction: 1 | -1) => void;
   let clearSelection: () => void;
   let selectActiveOption: () => void;
@@ -64,10 +63,6 @@
   };
 
   const onFocusIn = () => {
-    if ($isSearchEnabled) {
-      return;
-    }
-    lastSearchTerm = value;
     $isSearchEnabled = true;
   };
 
@@ -76,7 +71,6 @@
       $preventRaceConditionSearchBar = true;
     }
 
-    value = lastSearchTerm;
     closeDropdown();
     $isSearchEnabled = false;
     showFilter = false;
@@ -84,7 +78,6 @@
 
   const onHistoryTermClick = async (searchTerm: string) => {
     value = searchTerm;
-    lastSearchTerm = searchTerm;
     const searchPayload = { query: searchTerm };
     await onSearch(searchPayload);
   };
@@ -99,7 +92,6 @@
   };
 
   const onSubmit = () => {
-    lastSearchTerm = value;
     handlePromiseError(onSearch({ query: value }));
     saveSearchTerm(value);
   };
