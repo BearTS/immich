@@ -120,6 +120,11 @@
     }
   };
 
+  const onInput = () => {
+    openDropdown();
+    clearSelection();
+  };
+
   const openDropdown = () => {
     showSuggestions = true;
   };
@@ -164,7 +169,7 @@
         bind:value
         bind:this={input}
         on:focus={openDropdown}
-        on:input={openDropdown}
+        on:input={onInput}
         disabled={showFilter}
         role="combobox"
         aria-controls={listboxId}
