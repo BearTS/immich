@@ -156,36 +156,53 @@
     on:focusin={onFocusIn}
     role="search"
   >
-    <label for="main-search-bar" class="sr-only">{$t('search_your_photos')}</label>
-    <input
-      type="text"
-      name="q"
-      id="main-search-bar"
-      class="w-full transition-all border-2 px-14 py-4 text-immich-fg/75 dark:text-immich-dark-fg
+    <div use:focusOutside={{ onFocusOut: closeDropdown }}>
+      <label for="main-search-bar" class="sr-only">{$t('search_your_photos')}</label>
+      <input
+        type="text"
+        name="q"
+        id="main-search-bar"
+        class="w-full transition-all border-2 px-14 py-4 text-immich-fg/75 dark:text-immich-dark-fg
         {grayTheme ? 'dark:bg-immich-dark-gray' : 'dark:bg-immich-dark-bg'}
         {(showSuggestions && isSearchSuggestions) || showFilter ? 'rounded-t-3xl' : 'rounded-3xl bg-gray-200'}
         {$isSearchEnabled ? 'border-gray-200 dark:border-gray-600 bg-white' : 'border-transparent'}"
-      placeholder={$t('search_your_photos')}
-      required
-      pattern="^(?!m:$).*$"
-      bind:value
-      bind:this={input}
-      on:focus={openDropdown}
-      on:input={openDropdown}
-      disabled={showFilter}
-      role="combobox"
-      aria-controls={listboxId}
-      aria-activedescendant={selectedId}
-      aria-expanded={showSuggestions && isSearchSuggestions}
-      use:shortcuts={[
-        { shortcut: { key: 'Escape' }, onShortcut: onEscape },
-        { shortcut: { ctrl: true, shift: true, key: 'k' }, onShortcut: onFilterClick },
-        { shortcut: { key: 'ArrowUp' }, onShortcut: () => onArrow(-1) },
-        { shortcut: { key: 'ArrowDown' }, onShortcut: () => onArrow(1) },
-        { shortcut: { key: 'Enter' }, onShortcut: onEnter, preventDefault: false },
-        { shortcut: { key: 'ArrowDown', alt: true }, onShortcut: openDropdown },
-      ]}
-    />
+        placeholder={$t('search_your_photos')}
+        required
+        pattern="^(?!m:$).*$"
+        bind:value
+        bind:this={input}
+        on:focus={openDropdown}
+        on:input={openDropdown}
+        disabled={showFilter}
+        role="combobox"
+        aria-controls={listboxId}
+        aria-activedescendant={selectedId}
+        aria-expanded={showSuggestions && isSearchSuggestions}
+        use:shortcuts={[
+          { shortcut: { key: 'Escape' }, onShortcut: onEscape },
+          { shortcut: { ctrl: true, shift: true, key: 'k' }, onShortcut: onFilterClick },
+          { shortcut: { key: 'ArrowUp' }, onShortcut: () => onArrow(-1) },
+          { shortcut: { key: 'ArrowDown' }, onShortcut: () => onArrow(1) },
+          { shortcut: { key: 'Enter' }, onShortcut: onEnter, preventDefault: false },
+          { shortcut: { key: 'ArrowDown', alt: true }, onShortcut: openDropdown },
+        ]}
+      />
+
+      <!-- SEARCH HISTORY BOX -->
+      <SearchHistoryBox
+        id={listboxId}
+        searchQuery={value}
+        isOpen={showSuggestions}
+        bind:isSearchSuggestions
+        bind:moveSelection
+        bind:clearSelection
+        bind:selectActiveOption
+        onClearAllSearchTerms={clearAllSearchTerms}
+        onClearSearchTerm={(searchTerm) => clearSearchTerm(searchTerm)}
+        onSelectSearchTerm={(searchTerm) => handlePromiseError(onHistoryTermClick(searchTerm))}
+        onActiveSelectionChange={(id) => (selectedId = id)}
+      />
+    </div>
 
     <div class="absolute inset-y-0 {showClearIcon ? 'right-14' : 'right-2'} flex items-center pl-6 transition-all">
       <CircleIconButton title={$t('show_search_options')} icon={mdiTune} on:click={onFilterClick} size="20" />
@@ -198,21 +215,6 @@
     <div class="absolute inset-y-0 left-0 flex items-center pl-2">
       <CircleIconButton type="submit" disabled={showFilter} title={$t('search')} icon={mdiMagnify} size="20" />
     </div>
-
-    <!-- SEARCH HISTORY BOX -->
-    <SearchHistoryBox
-      id={listboxId}
-      searchQuery={value}
-      isOpen={showSuggestions}
-      bind:isSearchSuggestions
-      bind:moveSelection
-      bind:clearSelection
-      bind:selectActiveOption
-      onClearAllSearchTerms={clearAllSearchTerms}
-      onClearSearchTerm={(searchTerm) => clearSearchTerm(searchTerm)}
-      onSelectSearchTerm={(searchTerm) => handlePromiseError(onHistoryTermClick(searchTerm))}
-      onActiveSelectionChange={(id) => (selectedId = id)}
-    />
   </form>
 
   {#if showFilter}
