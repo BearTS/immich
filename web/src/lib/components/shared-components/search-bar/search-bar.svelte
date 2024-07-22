@@ -68,7 +68,6 @@
       return;
     }
     lastSearchTerm = value;
-    openDropdown();
     $isSearchEnabled = true;
   };
 
@@ -171,7 +170,7 @@
       pattern="^(?!m:$).*$"
       bind:value
       bind:this={input}
-      on:click={onFocusIn}
+      on:focus={openDropdown}
       on:input={openDropdown}
       disabled={showFilter}
       role="combobox"
