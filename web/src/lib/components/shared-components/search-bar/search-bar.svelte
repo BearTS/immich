@@ -38,7 +38,7 @@
   const onSearch = async (payload: SmartSearchDto | MetadataSearchDto) => {
     const params = getMetadataSearchQuery(payload);
 
-    showSuggestions = false;
+    closeDropdown();
     showFilter = false;
     $isSearchEnabled = false;
     await goto(`${AppRoute.SEARCH}?${params}`);
@@ -68,7 +68,7 @@
       return;
     }
     lastSearchTerm = value;
-    showSuggestions = true;
+    openDropdown();
     $isSearchEnabled = true;
   };
 
@@ -78,7 +78,7 @@
     }
 
     value = lastSearchTerm;
-    showSuggestions = false;
+    closeDropdown();
     $isSearchEnabled = false;
     showFilter = false;
   };
@@ -95,7 +95,7 @@
     value = '';
 
     if (showFilter) {
-      showSuggestions = false;
+      closeDropdown();
     }
   };
 
@@ -112,7 +112,7 @@
 
   const onEscape = () => {
     clearSelection();
-    showSuggestions = false;
+    closeDropdown();
     showFilter = false;
   };
 
@@ -131,6 +131,10 @@
 
   const openDropdown = () => {
     showSuggestions = true;
+  };
+
+  const closeDropdown = () => {
+    showSuggestions = false;
   };
 </script>
 
