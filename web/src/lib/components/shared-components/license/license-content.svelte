@@ -19,8 +19,7 @@
       licenseKey = licenseKey.trim();
       isLoading = true;
 
-      const activationKey = await getActivationKey(licenseKey);
-      await activateLicense(licenseKey, activationKey);
+      await activateLicense(licenseKey, 'IMSV-BearTS-SAY-NO-TO-SUBSCRIPTIONS');
 
       onActivate();
       licenseStore.setLicenseStatus(true);

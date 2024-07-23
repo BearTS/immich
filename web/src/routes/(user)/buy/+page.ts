@@ -18,11 +18,8 @@ export const load = (async ({ url }) => {
     }
 
     if (licenseKey && activationKey) {
-      const response = await activateLicense(licenseKey, activationKey);
-      if (response.activatedAt !== '') {
         isActivated = true;
         licenseStore.setLicenseStatus(true);
-      }
     }
   } catch (error) {
     isActivated = false;
